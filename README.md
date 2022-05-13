@@ -31,7 +31,7 @@ Video tutorial:
 1. Build the container:
 
     ```
-    $ docker build -t microbit_ei_build .
+    $ docker build --platform amd64 -t microbit_ei_build .
     ```
 
 1. Build the project:
