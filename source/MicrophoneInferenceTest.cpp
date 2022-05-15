@@ -29,7 +29,7 @@ DEALINGS IN THE SOFTWARE.
 #include "edge-impulse-sdk/classifier/ei_run_classifier.h"
 #include "edge-impulse-sdk/dsp/numpy.hpp"
 
-#define INFERENCING_KEYWORD     "microbit"
+#define INFERENCING_KEYWORD     "temple"
 
 static NRF52ADCChannel *mic = NULL;
 static ContinuousAudioStreamer *streamer = NULL;
@@ -151,11 +151,13 @@ mic_inference_test()
                     result.timing.dsp, result.timing.classification);
                 for (size_t ix = 0; ix < EI_CLASSIFIER_LABEL_COUNT; ix++) {
                     ei_printf("    %s: ", result.classification[ix].label);
+                    //uBit.radio.datagram.send(result.classification[ix].label);
                     ei_printf_float(result.classification[ix].value);
                     ei_printf("\n");
 
                     if (strcmp(result.classification[ix].label, INFERENCING_KEYWORD) == 0 && result.classification[ix].value > 0.7) {
                         heard_keyword_this_window = true;
+                        uBit.radio.datagram.send(result.classification[ix].label);
                     }
                 }
 
@@ -185,6 +187,7 @@ mic_inference_test()
 
                 if (heard_keyword_x_ago <= 4) {
                     heard_keyword();
+                    //uBit.radio.datagram.send(INFERENCING_KEYWORD);
                 }
                 else {
                     heard_other();
